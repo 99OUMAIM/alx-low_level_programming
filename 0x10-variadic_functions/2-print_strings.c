@@ -1,28 +1,33 @@
-#include "function_pointers.h"
+#include "variadic_functions.h"
+#include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
 /**
- * int_index - return index place if comparison = true, else -1
- * @array: array
- * @size: size of elements in array
- * @cmp: pointer to func of one of the 3 in main
- * Return: 0
+ * print_strings - Entry Point
+ * @separator: comma space
+ * @n: number of elements
+ * Return: void
  */
-int int_index(int *array, int size, int (*cmp)(int))
+void print_strings(const char *separator, const unsigned int n, ...)
 {
-	int i;
+	char *sep, *ptr;
+	unsigned int i;
+	va_list list;
 
-	if (array == NULL)
-		return (-1);
-	if (size <= 0)
-		return (-1);
-	if (cmp == NULL)
-		return (-1);
+	if (separator == NULL || *separator == 0)
+		sep = "";
+	else
+		sep = (char *) separator;
+	va_start(list, n);
 
-	for (i = 0; i < size; i++)
+	if (n > 0)
+		printf("%s", va_arg(list, char *));
+	for (i = 1; i < n; i++)
 	{
-		if (cmp(array[i]) != 0)
-			return (i);
+		ptr = va_arg(list, char*);
+		if (ptr == NULL)
+			ptr = "(nil)";
+		printf("%s%s", sep, ptr);
 	}
-	return (-1);
+	printf("\n");
+	va_end(list);
 }
